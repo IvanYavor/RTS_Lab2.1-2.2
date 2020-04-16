@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import math
 from random import *
 import numpy as np
+import timeit, time
+
 
 n = 12
 N = 64
@@ -77,6 +79,26 @@ x_fft_real = x_fft.real
 x_fft_img = x_fft.imag
 
 
+# Calc Task
+arr_x = []
+arr_dpf = []
+arr_fft = []
+arr_time = []
+
+for i in range(10):
+    start_dpf = time.time()
+    dpf(generateXt(2**i, n, alpha, freq, alpha))
+    end_dpf = time.time()
+    elapsed_dpf = end_dpf-start_dpf
+
+    start_fft = time.time()
+    fft(generateXt(2**i, n, alpha, freq, alpha))
+    end_fft = time.time()
+    elapsed_fft = end_fft-start_fft
+
+    arr_time.append(elapsed_fft/elapsed_dpf)
+
+print(arr_time)
 
 # Graphics
 
@@ -91,6 +113,18 @@ def draw_FFT():
     plt.show()
 
 
+def draw_task(arr_time):
+    plt.title("T(FFT)/T(DPF)")
+    N = []
+    for i in range(10):
+        N.append( 2**i )
+
+    plt.plot(N, arr_time, label="task")
+
+    plt.show()
+
+
 
 draw_DPF()
 draw_FFT()
+draw_task(arr_time)
